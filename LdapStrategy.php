@@ -103,7 +103,7 @@ class LdapStrategy extends OpauthStrategy{
 			'email'     => 'email',
 			'username'  => 'username',
 		), $this->strategy['attributes']);
-		
+
 		// fetch the attribute data
 		foreach ($mapping as $k => $v)
 		{
@@ -118,7 +118,7 @@ class LdapStrategy extends OpauthStrategy{
 					'message' => 'Required attribute "'.$k.'" not found in LDAP search',
 					'raw' => array(),
 				);
-	
+
 				$this->errorCallback($error);
 			}
 		}
@@ -153,9 +153,11 @@ class LdapStrategy extends OpauthStrategy{
 			// create the connection object
 			$this->ldap = ldap_connect($server);
 
-			// set the correct LDAP version
-			ldap_set_option($this->ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
-			ldap_set_option($this->ldap, LDAP_OPT_REFERRALS, 0);
+			// set any LDAP options passed
+			foreach ($options as $k => $v)
+			{
+				ldap_set_option($this->ldap, $k, $v);
+			}
 		}
 
 		// create the binding
