@@ -85,7 +85,7 @@ class LdapStrategy extends OpauthStrategy{
 
 			$attrs = ldap_get_entries($this->ldap, $attrs);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			$error = array(
 				'code' => 'bind_error',
@@ -103,18 +103,33 @@ class LdapStrategy extends OpauthStrategy{
 			'email'     => 'email',
 			'username'  => 'username',
 		), $this->strategy['attributes']);
+		
+		// fetch the attribute data
 		foreach ($mapping as $k => $v)
 		{
-			$mapping[$k] = '0.'.$v.'.0';
+			if (isset($attrs[0][$v][0]))
+			{
+				$mapping[$k] = $attrs[0][$v][0];
+			}
+			else
+			{
+				$error = array(
+					'code' => 'fetch_error',
+					'message' => 'Required attribute "'.$k.'" not found in LDAP search',
+					'raw' => array(),
+				);
+	
+				$this->errorCallback($error);
+			}
 		}
 
 		// construct the response array
 		$this->auth = array(
-			'uid' => \Arr::get($attrs, $mapping['uid'], ''),
+			'uid' => $mapping['uid'],
 			'info' => array(
-				'name' => \Arr::get($attrs, $mapping['name'], ''),
-				'email' => \Arr::get($attrs, $mapping['email'], ''),
-				'nickname' => \Arr::get($attrs, $mapping['username'], ''),
+				'name' => $mapping['name'],
+				'email' => $mapping['email'],
+				'nickname' => $mapping['username'],
 			),
 			'credentials' => array(
 				'token' => 0,
@@ -148,7 +163,7 @@ class LdapStrategy extends OpauthStrategy{
 		{
 			ldap_bind($this->ldap, $username, $password);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			$error = array(
 				'code' => 'bind_error',
