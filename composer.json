@@ -1,6 +1,6 @@
 {
-	"name": "flexcoders/opauth-activedirectory",
-	"description": "Active Directory strategy for Opauth",
+	"name": "flexcoders/opauth-ldap",
+	"description": "Ldap strategy for Opauth",
 	"keywords": ["authentication","auth","active directory", "AD"],
 	"homepage": "http://flexcoders.co.uk",
 	"license": "MIT",
