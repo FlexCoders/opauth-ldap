@@ -14,8 +14,31 @@ Getting started
 
 2. Configure Opauth-Ldap strategy.
 
-3. ** HOW TO CALL? **
+3. Call it.
 
+Since this is not an HTTP based protocol, some of the standard Opauth config does not apply. 
+There is no redirection involved, and a username and password needs to be passed.
+
+You call it like so:
+````
+// some input vars
+$providerName = "Ldap";
+
+// prep a config
+$config = [
+	'provider' => $providerName,
+	'username' => $_POST['username'],
+	'password' => $_POST['password'],
+	'request_uri' => '/current/uri/login/'.strtolower($providerName),
+	'callback_url' => '/current/uri/callback/'.strtolower($providerName),
+];
+
+// construct the Opauth object
+$this->opauth = new \Opauth($config, true);
+````
+
+It will attempt an LDAP login, and then redirect to the callback url, just like with all other Opauth
+strategies, and with a similar response.
 
 Strategy configuration
 ----------------------
