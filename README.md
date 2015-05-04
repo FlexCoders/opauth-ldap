@@ -29,8 +29,8 @@ $config = [
 	'provider' => $providerName,
 	'username' => $_POST['username'],
 	'password' => $_POST['password'],
-	'request_uri' => '/current/uri/login/'.strtolower($providerName),
-	'callback_url' => '/current/uri/callback/'.strtolower($providerName),
+	'request_uri' => '/current/uri/'.strtolower($providerName),
+	'callback_url' => '/your/uri/for/callback/'.strtolower($providerName),
 ];
 
 // construct the Opauth object
